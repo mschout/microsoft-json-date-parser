@@ -17,6 +17,7 @@ package io.github.mschout.microsoft.json.date
 
 import java.time.Instant
 import java.time.OffsetDateTime
+import kotlin.math.abs
 
 /**
  * Represents a date and time parsed from Microsoft's JSON date format.
@@ -30,4 +31,28 @@ import java.time.OffsetDateTime
 @JvmRecord
 data class MicrosoftJsonDate(val offsetDateTime: OffsetDateTime) {
   fun instant(): Instant = offsetDateTime.toInstant()
+
+  /**
+   * Returns the string representation of the date and time in Microsoft's JSON date format.
+   *
+   * The format is `/Date(ticks[+-]offset)/`, where:
+   * - `ticks` is the number of milliseconds since the Unix epoch (January 1, 1970, 00:00:00 UTC).
+   * - `offset` is the timezone offset from UTC in the format `[+-]HHMM`.
+   *
+   * @return The string representation of the date and time in Microsoft's JSON date format.
+   */
+  override fun toString(): String {
+    val epochMillis = offsetDateTime.toInstant().toEpochMilli()
+    return "/Date($epochMillis${getOffsetString()})/"
+  }
+
+  private fun getOffsetString(): String {
+    val offset = offsetDateTime.offset
+    val sign = if (offset.totalSeconds >= 0) "+" else "-"
+    val offsetSeconds = abs(offset.totalSeconds)
+    val hours = offsetSeconds / 3600
+    val minutes = (offsetSeconds % 3600) / 60
+
+    return "${sign}${"%02d%02d".format(hours, minutes)}"
+  }
 }

@@ -1,6 +1,6 @@
 # Microsoft JSON Date Parser
 
-A lightweight Kotlin/JVM library for parsing Microsoft's JSON date format (`/Date(ticks+offset)/`) into `java.time.OffsetDateTime` objects.
+A lightweight Kotlin/JVM library for parsing and formatting Microsoft's JSON date format (`/Date(ticks+offset)/`) with `java.time.OffsetDateTime` objects.
 
 Microsoft's JSON date format is commonly found in responses from WCF services, ASP.NET, and older Microsoft APIs. This library provides a simple, dependency-free parser to convert these date strings into standard Java Time types.
 
@@ -61,6 +61,9 @@ println(instant) // 2009-02-13T23:31:30Z
 
 // Null-safe: returns null for null input
 val result = parser.parse(null) // null
+
+// Convert back to Microsoft JSON date format
+println(dateWithOffset.toString()) // /Date(1234567890000+0530)/
 ```
 
 ### Java
@@ -75,6 +78,7 @@ MicrosoftJsonDate date = parser.parse("/Date(1234567890000+0530)/");
 if (date != null) {
     System.out.println(date.offsetDateTime()); // 2009-02-14T05:01:30+05:30
     System.out.println(date.instant());        // 2009-02-13T23:31:30Z
+    System.out.println(date.toString());       // /Date(1234567890000+0530)/
 }
 ```
 
