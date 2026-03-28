@@ -115,7 +115,7 @@ parser.parse("")                 // throws IllegalArgumentException
 
 ## Requirements
 
-- Java 21 or higher
+- Java 17 or higher
 
 ## License
 
